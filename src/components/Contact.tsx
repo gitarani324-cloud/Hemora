@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Heart, Mail, Phone, MapPin, Clock, ArrowLeft, Send } from "lucide-react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
+import { Dialog, Transition } from "@headlessui/react";
+
 
 interface ContactProps {
   currentPage: string;
@@ -23,6 +26,10 @@ export function Contact({
   onGoToDashboard,
   onDonateNow
 }: ContactProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -111,6 +118,159 @@ export function Contact({
 
   return (
     <div className="min-h-screen bg-background transition-all duration-300 ease-in-out">
+      {/* Mobile menu */}
+      <Transition.Root show={mobileMenuOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-50 lg:hidden" onClose={setMobileMenuOpen}>
+          {/* Background Overlay */}
+          <Transition.Child
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-900/80" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 flex">
+            {/* Sliding Menu Panel */}
+            <Transition.Child
+              as={Fragment}
+              enter="transition ease-in-out duration-300 transform"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
+            >
+              <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
+                {/* Close Button */}
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-in-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in-out duration-300"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
+                    <button type="button" className="-m-2.5 p-2.5" onClick={() => setMobileMenuOpen(false)}>
+                      <span className="sr-only">Close menu</span>
+                      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                    </button>
+                  </div>
+                </Transition.Child>
+                
+                {/* Sidebar content goes here */}
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
+                  <div className="flex h-16 shrink-0 items-center">
+                    <button 
+                      onClick={() => {
+                        onNavigateToHome();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="flex items-center space-x-1" 
+                      aria-label="Home – Blood Donation"
+                    >
+                      <img 
+                         src="/assets/logo.svg" 
+                         alt="Blood Donation logo" 
+                         width="32" 
+                         height="32" 
+                         className="w-8 h-8 object-contain"
+                       />
+                      <span className="text-xl font-semibold text-gray-900">Hemora</span>
+                    </button>
+                  </div>
+                  <nav className="flex flex-1 flex-col">
+                    <div className="space-y-1">
+                      <button 
+                        onClick={() => {
+                          onNavigateToHome();
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`block w-full text-left px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                          currentPage === 'homepage' 
+                            ? 'text-primary bg-primary/10' 
+                            : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                        }`}
+                      >
+                        Home
+                      </button>
+                      <button 
+                        onClick={() => {
+                          onNavigateToAbout();
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`block w-full text-left px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                          currentPage === 'about' 
+                            ? 'text-primary bg-primary/10' 
+                            : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                        }`}
+                      >
+                        About
+                      </button>
+                      <button 
+                        onClick={() => {
+                          onNavigateToDrives();
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`block w-full text-left px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                          currentPage === 'drives' 
+                            ? 'text-primary bg-primary/10' 
+                            : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                        }`}
+                      >
+                        Drives
+                      </button>
+                      <button 
+                        onClick={() => {
+                          onGoToDashboard();
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`block w-full text-left px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                          currentPage === 'dashboard' 
+                            ? 'text-primary bg-primary/10' 
+                            : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                        }`}
+                      >
+                        Dashboard
+                      </button>
+                      <button 
+                        onClick={() => {
+                          onNavigateToContact();
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`block w-full text-left px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                          currentPage === 'contact' 
+                            ? 'text-primary bg-primary/10' 
+                            : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                        }`}
+                      >
+                        Contact
+                      </button>
+                    </div>
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <Button 
+                        onClick={() => {
+                          onDonateNow();
+                          setMobileMenuOpen(false);
+                        }}
+                        className="w-full"
+                      >
+                        Donate Now
+                      </Button>
+                    </div>
+                  </nav>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition.Root>
       {/* Navigation */}
       <nav className="navbar-sticky">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -184,45 +344,14 @@ export function Contact({
             </div>
             <div className="md:hidden flex items-center space-x-2">
               <Button onClick={onDonateNow} size="sm">Donate</Button>
-              <button 
-                id="hamburger-btn"
-                className="hamburger-icon" 
-                aria-label="Menu"
-                aria-expanded="false"
-                onClick={() => {
-                  const menu = document.getElementById('mobile-menu');
-                const overlay = document.getElementById('mobile-menu-overlay');
-                  if (menu && overlay) {
-                    menu.classList.remove('hidden');
-                    overlay.classList.remove('hidden');
-                  }
-                }}
+              <button
+                type="button"
+                className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+                onClick={() => setMobileMenuOpen(true)}
               >
-                &#9776;
+                <span className="sr-only">Open main menu</span>
+                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
               </button>
-            </div>
-          </div>
-          <div id="mobile-menu-overlay" className="mobile-menu-overlay hidden"></div>
-          <div id="mobile-menu" className="mobile-menu hidden">
-            <div className="mobile-menu-header">
-              <div className="mobile-menu-logo">
-              <img src="/assets/logo.svg" alt="Hemora" className="mobile-logo-img" />
-              <span>Hemora</span>
-            </div>
-              <button 
-                id="mobile-close-btn"
-                className="mobile-menu-close" 
-                aria-label="Close menu"
-              >
-                ×
-              </button>
-            </div>
-            <div className="mobile-menu-content">
-              <button className={`mobile-menu-button ${currentPage === 'homepage' ? 'active' : ''}`} onClick={onNavigateToHome}>Home</button>
-              <button className={`mobile-menu-button ${currentPage === 'about' ? 'active' : ''}`} onClick={onNavigateToAbout}>About</button>
-              <button className={`mobile-menu-button ${currentPage === 'drives' ? 'active' : ''}`} onClick={onNavigateToDrives}>Drives</button>
-              <button className={`mobile-menu-button ${currentPage === 'dashboard' ? 'active' : ''}`} onClick={onGoToDashboard}>Dashboard</button>
-              <button className={`mobile-menu-button ${currentPage === 'contact' ? 'active' : ''}`} onClick={onNavigateToContact}>Contact</button>
             </div>
           </div>
         </div>
