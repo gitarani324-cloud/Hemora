@@ -9,10 +9,11 @@ import { DonorDashboard } from "./components/DonorDashboard";
 import { About } from "./components/About";
 import { Drives } from "./components/Drives";
 import { Contact } from "./components/Contact";
+import { IntroAnimation } from "./pages/IntroAnimation";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
-type AppState = "homepage" | "about" | "drives" | "contact" | "registration" | "booking" | "success" | "request-blood" | "request-success" | "dashboard";
+type AppState = "intro" | "homepage" | "about" | "drives" | "contact" | "registration" | "booking" | "success" | "request-blood" | "request-success" | "dashboard";
 
 interface DonorData {
   personalInfo: {
@@ -58,6 +59,8 @@ interface RequestData {
 
 export default function App() {
   const [currentState, setCurrentState] = useState<AppState>("homepage");
+  // NOTE: To enable intro by default for demos, change above to: useState<AppState>("intro");
+  // Or add URL routing to automatically redirect "/" to "/intro"
   const [donorData, setDonorData] = useState<DonorData | null>(null);
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [requestData, setRequestData] = useState<RequestData | null>(null);
@@ -136,6 +139,9 @@ export default function App() {
     setRequestData(null);
   };
 
+  const handleIntroComplete = () => {
+    setCurrentState("homepage");
+  };
   const handleBackToRegistration = () => {
     setCurrentState("registration");
   };
@@ -148,6 +154,12 @@ export default function App() {
     <div className="min-h-screen transition-all duration-300 ease-in-out">
       <Toaster position="top-right" richColors />
       
+      {currentState === "intro" && (
+        <div className="intro-route">
+          <IntroAnimation onComplete={handleIntroComplete} />
+        </div>
+      )}
+
       {currentState === "homepage" && (
         <div className="animate-in fade-in duration-300">
           <Homepage

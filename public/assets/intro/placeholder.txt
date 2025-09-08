@@ -1,0 +1,36 @@
+HEMORA INTRO ANIMATION ASSETS
+================================
+
+Place your intro animation files here:
+
+📁 PREFERRED: hemora_intro.glb
+   - 3D animated droplet scene exported from Blender
+   - Should contain droplet fall/splash animation
+   - Optimized for web (< 5MB recommended)
+   - See README.md for detailed export guidelines
+
+📁 FALLBACK: hemora_intro.mp4  
+   - High-quality video of droplet animation
+   - 1080p, H.264, muted, 3-4 seconds
+   - Auto-plays once then transitions to landing
+
+📁 OPTIONAL: hemora_poster.jpg
+   - Static poster image for reduced-motion users
+   - High-resolution brand image or droplet still
+
+USAGE:
+------
+1. Export your 3D droplet animation from Blender as hemora_intro.glb
+2. Place the file in this directory (public/assets/intro/)
+3. Navigate to /intro in your browser
+4. The intro will auto-detect and play your animation
+5. After completion, it smoothly transitions to the main landing page
+
+The intro component will automatically:
+- Try to load GLB first (with three.js)
+- Fall back to MP4 if GLB not found
+- Show static poster if neither exists
+- Respect user's motion preferences
+- Provide Skip button for immediate navigation
+
+For development, you can test with placeholder content by visiting /intro
